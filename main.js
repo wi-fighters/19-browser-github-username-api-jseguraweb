@@ -28,6 +28,9 @@ const gitHubData = async () => {
             container.appendChild(link);
             userName.innerText = userInput.value;
             container.style.display = 'flex';
+            window.setTimeout(() => {
+                userInput.value = '';
+            }, 0);
         })
     } catch(err){
         console.log(err);
