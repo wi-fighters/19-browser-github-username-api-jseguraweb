@@ -3,15 +3,31 @@
 const userInput = document.querySelector('#user-input');
 const form = document.querySelector('form');
 const container = document.querySelector('.container');
+const profileContainer = document.querySelector('.profile-container');
 const userName = document.querySelector('.name');
+const userBio = document.querySelector('.bio');
+const userLocation = document.querySelector('.location');
+const userFollowers = document.querySelector('.followers');
+const userRepositories = document.querySelector('.repositories');
+const profileImage = document.querySelector('#profile-img');
+
 
 const gitHubData = async () => {
     try {
-        let gitHubResponse = await fetch(`https://api.github.com/users/${userInput.value}/repos`);
-        let convertedData = await gitHubResponse.json();
+        let gitHubReposResponse = await fetch(`https://api.github.com/users/${userInput.value}/repos`);
+        let gitHubProfileResponse = await fetch(`https://api.github.com/users/${userInput.value}`);
+        let convertedReposData = await gitHubReposResponse.json();
+        let convertedProfileData = await gitHubProfileResponse.json();
 
-        convertedData.map(repo => {
-            container.style.display = 'none';
+        convertedReposData.map(repo => {
+            // console.log(repo);
+            profileContainer.style.display = 'flex';
+            container.style.display = 'flex';
+            userName.innerText = convertedProfileData.login;
+            userBio.innerText = convertedProfileData.bio;
+            userLocation.innerText = convertedProfileData.location;
+            userFollowers.innerText = convertedProfileData.followers;
+            userRepositories.innerText = userInput.value;
             const item = document.createElement('div');
             item.classList.add('repo');
             const link = document.createElement('a');
@@ -26,8 +42,7 @@ const gitHubData = async () => {
             description.appendChild(document.createTextNode(repo.description));
             item.append(title, description);
             container.appendChild(link);
-            userName.innerText = userInput.value;
-            container.style.display = 'flex';
+            profileImage.src = repo.owner.avatar_url;
             window.setTimeout(() => {
                 userInput.value = '';
             }, 0);
@@ -42,6 +57,7 @@ form.addEventListener('submit', (e) => {
     if (userInput.value === '') {
         alert('Please, enter username')
     } else {
+        container.innerHTML = '';
         gitHubData();
     }
 })
