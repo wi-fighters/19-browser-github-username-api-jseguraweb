@@ -3,6 +3,7 @@
 const userInput = document.querySelector('#user-input');
 const form = document.querySelector('form');
 const container = document.querySelector('.container');
+const userName = document.querySelector('.name');
 
 const gitHubData = async () => {
     try {
@@ -25,6 +26,7 @@ const gitHubData = async () => {
             description.appendChild(document.createTextNode(repo.description));
             item.append(title, description);
             container.appendChild(link);
+            userName.innerText = userInput.value;
             container.style.display = 'flex';
         })
     } catch(err){
